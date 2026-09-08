@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Clef Reader — Note Reading Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=natural-placement-1" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ========================= HOME / SETUP SCREEN ========================= -->
+  <section id="home-screen" class="screen" aria-label="Setup">
+    <header class="home-header">
+      <p class="eyebrow-mark" aria-hidden="true">♪</p>
+      <h1>Clef Reader</h1>
+      <p class="tagline">Sight-read notes across bass, tenor, alto, and treble clef.</p>
+    </header>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <span class="stat-value" id="high-score-value">0</span>
+        <span class="stat-label">High score</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="last-score-value">0</span>
+        <span class="stat-label">Last game</span>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <fieldset class="mode-selection">
+        <legend>Practice mode</legend>
+        <label><input type="radio" name="mode" value="read" checked /> Read the note</label>
+        <label><input type="radio" name="mode" value="place" /> Place the note</label>
+      </fieldset>
+      <fieldset class="clef-selection">
+        <legend>Clefs in play</legend>
+        <label class="clef-option">
+          <input type="checkbox" name="clef" value="treble" checked />
+          <span class="clef-check-visual" aria-hidden="true"></span>
+          <span>Treble clef</span>
+        </label>
+        <label class="clef-option">
+          <input type="checkbox" name="clef" value="alto" />
+          <span class="clef-check-visual" aria-hidden="true"></span>
+          <span>Alto clef</span>
+        </label>
+        <label class="clef-option">
+          <input type="checkbox" name="clef" value="tenor" checked />
+          <span class="clef-check-visual" aria-hidden="true"></span>
+          <span>Tenor clef</span>
+        </label>
+        <label class="clef-option">
+          <input type="checkbox" name="clef" value="bass" checked />
+          <span class="clef-check-visual" aria-hidden="true"></span>
+          <span>Bass clef</span>
+        </label>
+      </fieldset>
+      <p class="field-hint" id="clef-hint" role="alert" hidden>Pick at least one clef to continue.</p>
+
+      <label class="sound-setting">
+        <span class="sound-copy">
+          <span id="sound-label" class="sound-label">Sound</span>
+          <span id="sound-description" class="sound-description">Play each note aloud</span>
+        </span>
+        <input type="checkbox" id="sound-enabled" role="switch" aria-labelledby="sound-label" aria-describedby="sound-description" checked />
+        <span class="sound-switch" aria-hidden="true"></span>
+        <span class="sound-state" aria-hidden="true"></span>
+      </label>
+
+      <div class="ledger-selection" id="ledger-setting">
+        <div class="ledger-label-row">
+          <span class="ledger-label">Ledger line range</span>
+          <span class="ledger-value" id="ledger-value-label">2 ledger lines</span>
+        </div>
+        <div class="ledger-stepper" id="ledger-stepper" role="radiogroup" aria-label="Ledger line range">
+          <button type="button" class="ledger-option" data-value="0" role="radio" aria-checked="false">0</button>
+          <button type="button" class="ledger-option" data-value="1" role="radio" aria-checked="false">1</button>
+          <button type="button" class="ledger-option" data-value="2" role="radio" aria-checked="true">2</button>
+        </div>
+      </div>
+    </div>
+
+    <button id="start-button" class="primary-button" type="button">Start game</button>
+  </section>
+
+  <!-- ============================ GAME SCREEN ============================== -->
+  <section id="game-screen" class="screen" hidden aria-label="Game in progress">
+    <header class="game-top-bar">
+      <button id="quit-button" class="icon-button" type="button" aria-label="End game and return to settings">✕</button>
+
+      <div class="lives" id="lives-display" aria-label="Lives remaining">
+        <span class="heart" data-index="0">♥</span>
+        <span class="heart" data-index="1">♥</span>
+        <span class="heart" data-index="2">♥</span>
+      </div>
+
+      <div class="score-display">
+        <span class="score-label">Score</span>
+        <span class="score-value" id="score-value">0</span>
+      </div>
+    </header>
+
+    <div class="timer-bar-track" id="timer-track">
+      <div class="timer-bar-fill" id="timer-fill"></div>
+      <span class="timer-numeric" id="timer-numeric">10.0</span>
+    </div>
+
+    <div id="placement-prompt" class="placement-prompt" hidden>
+      Place <strong id="target-pitch"></strong><span id="target-clef"></span>
+    </div>
+    <div class="staff-stage">
+      <div class="staff-container" id="staff-container"></div>
+      <div class="feedback-banner" id="feedback-banner" aria-live="polite"></div>
+    </div>
+
+    <div id="placement-controls" class="placement-controls" hidden>
+      <p id="placement-help">Hover or drag to preview; release to place. Any octave counts.<br>Use up to 2 ledger lines below or 3 above. Keyboard: ↑ / ↓, then Enter.</p>
+    </div>
+
+    <div class="answer-grid" id="answer-grid" aria-label="Choose the pitch">
+      <!-- 12 buttons injected by ui.js -->
+    </div>
+  </section>
+
+  <!-- ============================ GAME OVER MODAL =========================== -->
+  <div id="game-over-modal" class="modal-overlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+      <p class="modal-eyebrow" id="new-high-score-badge" hidden>New high score!</p>
+      <h2 id="game-over-title">Game over</h2>
+      <p class="modal-final-score"><span id="final-score-value">0</span> <span class="modal-final-score-label">notes read correctly</span></p>
+      <p class="modal-high-score">High score: <span id="modal-high-score-value">0</span></p>
+      <div class="modal-actions">
+        <button id="play-again-button" class="primary-button" type="button">Play again</button>
+        <button id="change-settings-button" class="secondary-button" type="button">Change settings</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vexflow@4/build/cjs/vexflow.js"></script>
+<script type="module" src="js/main.js?v=natural-placement-1"></script>
+</body>
+</html>
