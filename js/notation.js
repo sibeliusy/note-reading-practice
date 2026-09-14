@@ -7,7 +7,7 @@
 // exactly one place (musicTheory.js) and simply consumed here.
 // ---------------------------------------------------------------------------
 
-import { vexClefName, vexKey } from './musicTheory.js?v=natural-placement-1';
+import { vexClefName, vexKey } from './musicTheory.js?v=mobile-staff-2';
 
 function getVF() {
   // VexFlow 4's UMD bundle exposes `Vex.Flow`; newer standalone builds may
@@ -41,8 +41,12 @@ function sizeToContainer() {
   // VexFlow writes inline dimensions on BOTH elements during resize.
   // Remove those overrides so the responsive CSS can enlarge the music.
   containerEl.style.removeProperty('width');
-  svg.style.removeProperty('width');
-  svg.style.removeProperty('height');
+  // Use actual available pixels rather than nested percentage heights.
+  // The fixed-position container is independent of SVG intrinsic dimensions.
+  const rect = containerEl.getBoundingClientRect();
+  const scale = Math.max(0, Math.min(rect.width / width, rect.height / height, 3.3));
+  svg.style.width = `${width * scale}px`;
+  svg.style.height = `${height * scale}px`;
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
   svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
   return { width, height };

@@ -1,6 +1,6 @@
-import { CONFIG } from './config.js?v=natural-placement-1';
-import { noteAtPosition } from './musicTheory.js?v=natural-placement-1';
-import { renderNote, positionAtPointer } from './notation.js?v=natural-placement-1';
+import { CONFIG } from './config.js?v=mobile-staff-2';
+import { noteAtPosition } from './musicTheory.js?v=mobile-staff-2';
+import { renderNote, positionAtPointer } from './notation.js?v=mobile-staff-2';
 
 const staff = document.getElementById('staff-container');
 const controls = document.getElementById('placement-controls');

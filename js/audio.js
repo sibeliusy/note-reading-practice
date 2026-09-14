@@ -7,7 +7,7 @@
 // to respect browser autoplay restrictions.
 // ---------------------------------------------------------------------------
 
-import { CONFIG } from './config.js?v=natural-placement-1';
+import { CONFIG } from './config.js?v=mobile-staff-2';
 
 let audioContext = null;
 

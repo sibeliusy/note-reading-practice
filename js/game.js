@@ -8,8 +8,8 @@
 // "Place the Note" mode reuse the timer/scoring/lives machinery unchanged.
 // ---------------------------------------------------------------------------
 
-import { CONFIG } from './config.js?v=natural-placement-1';
-import { generateQuestion, pitchClassOf } from './musicTheory.js?v=natural-placement-1';
+import { CONFIG } from './config.js?v=mobile-staff-2';
+import { generateQuestion, pitchClassOf } from './musicTheory.js?v=mobile-staff-2';
 
 /**
  * Time limit (seconds) for the question immediately following `correctCount`

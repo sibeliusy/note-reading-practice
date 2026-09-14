@@ -4,12 +4,12 @@
 // transitions (home <-> game <-> game-over).
 // ---------------------------------------------------------------------------
 
-import { CONFIG } from './config.js?v=natural-placement-1';
-import { GameEngine } from './game.js?v=natural-placement-1';
-import { frequencyOf, pitchClassOf } from './musicTheory.js?v=natural-placement-1';
-import * as placement from './placement.js?v=natural-placement-1';
-import { unlockAudio, playTone } from './audio.js?v=natural-placement-1';
-import * as ui from './ui.js?v=natural-placement-1';
+import { CONFIG } from './config.js?v=mobile-staff-2';
+import { GameEngine } from './game.js?v=mobile-staff-2';
+import { frequencyOf, pitchClassOf } from './musicTheory.js?v=mobile-staff-2';
+import * as placement from './placement.js?v=mobile-staff-2';
+import { unlockAudio, playTone } from './audio.js?v=mobile-staff-2';
+import * as ui from './ui.js?v=mobile-staff-2';
 
 let engine = null;
 let lastSelectedIndex = undefined;
@@ -91,13 +91,20 @@ function boot() {
     onChangeSettings: returnToSettings,
   });
 
-  let resizeTimeout;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
+  let resizeFrame = null;
+  const scheduleLayout = () => {
+    if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = null;
       refreshLayout();
-    }, 80);
-  });
+    });
+  };
+  window.addEventListener('resize', scheduleLayout);
+  window.visualViewport?.addEventListener('resize', scheduleLayout);
+  if (window.ResizeObserver) {
+    const observer = new ResizeObserver(scheduleLayout);
+    observer.observe(document.getElementById('staff-container'));
+  }
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {

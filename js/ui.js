@@ -7,9 +7,9 @@
 // render* functions exported below.
 // ---------------------------------------------------------------------------
 
-import { CONFIG, PITCH_CLASS_NAMES, STORAGE_KEYS } from './config.js?v=natural-placement-1';
-import { initNotation, renderNote, handleResize as resizeStaff } from './notation.js?v=natural-placement-1';
-import { pitchClassOf } from './musicTheory.js?v=natural-placement-1';
+import { CONFIG, PITCH_CLASS_NAMES, STORAGE_KEYS } from './config.js?v=mobile-staff-2';
+import { initNotation, renderNote, handleResize as resizeStaff } from './notation.js?v=mobile-staff-2';
+import { pitchClassOf } from './musicTheory.js?v=mobile-staff-2';
 
 // ---- DOM references --------------------------------------------------
 const homeScreen = document.getElementById('home-screen');
@@ -103,7 +103,8 @@ export function initHomeScreen({ onStart }) {
     refreshHomeStats();
   };
   modeInputs.forEach(input => {
-    input.checked = input.value === (savedSettings?.mode === 'place' ? 'place' : 'read');
+    // Each visit starts in reading mode; replay still uses the current settings.
+    input.checked = input.value === 'read';
     input.addEventListener('change', updateMode);
   });
   updateMode();
